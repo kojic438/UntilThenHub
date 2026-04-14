@@ -195,6 +195,24 @@
       max-width: 1180px;
     }
 
+    .search-wrap {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto 22px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      outline: none;
+      font-size: 0.95rem;
+      backdrop-filter: blur(10px);
+    }
+
     .card {
       width: 100%;
       background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
@@ -207,6 +225,11 @@
       grid-template-columns: 1.1fr 0.9fr;
       animation: cardRise 1s ease;
       position: relative;
+      margin-top: 24px;
+    }
+
+    .card:first-of-type {
+      margin-top: 0;
     }
 
     .card::before {
@@ -357,106 +380,6 @@
       filter: brightness(1.05);
     }
 
-    .hover-shot {
-      position: fixed;
-      right: 24px;
-      bottom: 24px;
-      width: min(380px, 34vw);
-      aspect-ratio: 16 / 9;
-      border-radius: 22px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(8, 15, 30, 0.92);
-      box-shadow: 0 24px 70px rgba(0,0,0,0.4);
-      backdrop-filter: blur(10px);
-      opacity: 0;
-      transform: translateY(18px) scale(0.96);
-      pointer-events: none;
-      transition: opacity 0.28s ease, transform 0.28s ease;
-      z-index: 40;
-    }
-
-    .hover-shot.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    .hover-shot img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .hover-shot-label {
-      position: absolute;
-      left: 12px;
-      bottom: 12px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #fff;
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-    }
-
-    .image-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.84);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity 0.25s ease, visibility 0.25s ease;
-      z-index: 80;
-      backdrop-filter: blur(8px);
-    }
-
-    .image-modal.show {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    .image-modal-inner {
-      position: relative;
-      width: min(1000px, 92vw);
-      max-height: 90vh;
-      border-radius: 24px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.16);
-      box-shadow: 0 30px 90px rgba(0,0,0,0.45);
-      background: rgba(15, 23, 42, 0.96);
-    }
-
-    .image-modal img {
-      width: 100%;
-      max-height: 90vh;
-      object-fit: contain;
-      display: block;
-      background: #020617;
-    }
-
-    .image-modal-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 42px;
-      height: 42px;
-      border: 0;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.55);
-      color: white;
-      font-size: 1.2rem;
-      cursor: pointer;
-      z-index: 2;
-    }
-
     .file-title {
       font-size: 1.2rem;
       font-weight: 800;
@@ -560,6 +483,113 @@
       animation: shineMove 4s linear infinite;
     }
 
+    .hover-shot {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: min(380px, 34vw);
+      aspect-ratio: 16 / 9;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(8, 15, 30, 0.92);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(18px) scale(0.96);
+      pointer-events: none;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+      z-index: 40;
+    }
+
+    .hover-shot.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .hover-shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hover-shot-label {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+    }
+
+    .image-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.84);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+      z-index: 80;
+      backdrop-filter: blur(8px);
+    }
+
+    .image-modal.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .image-modal-inner {
+      position: relative;
+      width: min(1000px, 92vw);
+      max-height: 90vh;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.45);
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .image-modal img {
+      width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      display: block;
+      background: #020617;
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.55);
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .empty-search {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
     @keyframes popIn {
       0% { transform: scale(0.82); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
@@ -641,7 +671,6 @@
         bottom: 12px;
       }
     }
-    }
   </style>
 </head>
 <body>
@@ -660,7 +689,11 @@
 
   <main class="page">
     <div class="shell">
-      <section class="card">
+      <div class="search-wrap">
+        <input id="searchInput" class="search-input" type="text" placeholder="Search games..." />
+      </div>
+
+      <section class="card game-card" data-name="until then">
         <div class="left">
           <h1>Download <span class="shine">UntilThen</span></h1>
           <p class="desc">
@@ -668,11 +701,11 @@
           </p>
 
           <div class="buttons">
-            <a class="btn btn-primary" id="downloadBtn" href="https://drive.google.com/uc?export=download&id=1eq62VLWu1W6heGobj1Ckqew-5DDEBLW5" download>Download Now</a>
+            <a class="btn btn-primary download-btn" href="https://drive.google.com/uc?export=download&id=1eq62VLWu1W6heGobj1Ckqew-5DDEBLW5" download>Download Now</a>
           </div>
         </div>
 
-        <div class="right" id="details">
+        <div class="right">
           <div class="preview-box preview-hover" data-title="UntilThen" data-preview="untilthen.png">
             <div class="preview-top">
               <img src="untilthen.png" alt="Game Logo" class="mini-logo clickable-shot" data-full="untilthen.png" />
@@ -706,7 +739,7 @@
         </div>
       </section>
 
-      <section class="card" style="margin-top:24px;">
+      <section class="card game-card" data-name="escape from yandere">
         <div class="left">
           <h1>Download <span class="shine">Escape From Yandere</span></h1>
           <p class="desc">
@@ -714,7 +747,7 @@
           </p>
 
           <div class="buttons">
-            <a class="btn btn-primary" href="https://drive.google.com/uc?export=download&id=1ed8-OFBn0SlJQGDlrtac50Ih8GfcIM38">Download Now</a>
+            <a class="btn btn-primary download-btn" href="https://drive.google.com/uc?export=download&id=1ed8-OFBn0SlJQGDlrtac50Ih8GfcIM38" download>Download Now</a>
           </div>
         </div>
 
@@ -752,6 +785,8 @@
         </div>
       </section>
 
+      <p id="emptySearch" class="empty-search">No games found.</p>
+
       <div class="suggest-wrap">
         <input id="suggestInput" class="suggest-input" type="text" placeholder="Suggest a game..." maxlength="80" />
         <button id="suggestBtn" class="btn btn-secondary" type="button">Send Suggestion</button>
@@ -762,7 +797,9 @@
         <div class="bao-note"><span>THANK YOU BAO!</span></div>
       </div>
     </div>
-    <div class="hover-shot" id="hoverShot">
+  </main>
+
+  <div class="hover-shot" id="hoverShot">
     <img id="hoverShotImg" src="" alt="Preview" />
     <div class="hover-shot-label" id="hoverShotLabel">Game Preview</div>
   </div>
@@ -773,7 +810,6 @@
       <img id="imageModalImg" src="" alt="Full Preview" />
     </div>
   </div>
-</main>
 
   <script>
     window.addEventListener('load', () => {
@@ -791,20 +827,21 @@
       }, 1700);
     });
 
-    const btn = document.getElementById('downloadBtn');
-    if (btn) {
+    const downloadButtons = document.querySelectorAll('.download-btn');
+    downloadButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
+        const originalText = btn.textContent;
         btn.textContent = 'Downloading...';
         btn.style.opacity = '0.7';
         btn.style.pointerEvents = 'none';
 
         setTimeout(() => {
-          btn.textContent = 'Download Again';
+          btn.textContent = originalText;
           btn.style.opacity = '1';
           btn.style.pointerEvents = 'auto';
         }, 4000);
       });
-    }
+    });
 
     const suggestBtn = document.getElementById('suggestBtn');
     const suggestInput = document.getElementById('suggestInput');
@@ -868,7 +905,29 @@
         }
       });
     }
-  
+
+    const searchInput = document.getElementById('searchInput');
+    const gameCards = document.querySelectorAll('.game-card');
+    const emptySearch = document.getElementById('emptySearch');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        gameCards.forEach((card) => {
+          const name = card.dataset.name || '';
+          const match = name.includes(query);
+          card.style.display = match ? 'grid' : 'none';
+          if (match) visibleCount += 1;
+        });
+
+        if (emptySearch) {
+          emptySearch.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+      });
+    }
+
     const hoverBoxes = document.querySelectorAll('.preview-hover');
     const hoverShot = document.getElementById('hoverShot');
     const hoverShotImg = document.getElementById('hoverShotImg');
