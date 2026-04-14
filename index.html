@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Imu D. Pinili Games</title>
+  <title>UntilThen Downloader</title>
   <style>
     * {
       box-sizing: border-box;
@@ -19,8 +19,6 @@
       --muted: #cbd5e1;
       --soft: #94a3b8;
       --line: rgba(255,255,255,0.12);
-      --glass: rgba(255,255,255,0.08);
-      --glass-strong: rgba(255,255,255,0.12);
     }
 
     html {
@@ -44,7 +42,6 @@
     body::after {
       content: "";
       position: fixed;
-      inset: auto;
       width: 420px;
       height: 420px;
       border-radius: 50%;
@@ -164,6 +161,25 @@
       text-shadow: 0 0 25px rgba(255,255,255,0.18);
     }
 
+    .loader-shell {
+      width: min(320px, 78vw);
+      margin: 18px auto 0;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .loader-bar {
+      height: 10px;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #7dd3fc, #c4b5fd, #ffffff);
+      box-shadow: 0 0 18px rgba(125,211,252,0.45);
+      transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
     .page {
       position: relative;
       z-index: 1;
@@ -212,29 +228,6 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
     }
 
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      color: #dbeafe;
-      font-size: 0.86rem;
-      margin-bottom: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-    }
-
-    .tag::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #38bdf8;
-      box-shadow: 0 0 14px rgba(56,189,248,0.8);
-    }
-
     h1 {
       font-size: clamp(2.4rem, 6vw, 4.7rem);
       line-height: 0.95;
@@ -259,22 +252,6 @@
       margin-bottom: 30px;
     }
 
-    .feature-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 30px;
-    }
-
-    .chip {
-      padding: 10px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: #dbeafe;
-      font-size: 0.92rem;
-    }
-
     .buttons {
       display: flex;
       justify-content: flex-start;
@@ -295,11 +272,11 @@
       line-height: 1;
       white-space: nowrap;
       width: auto;
-      min-width: 0;
       max-width: max-content;
       transition: transform 0.25s ease, opacity 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
       overflow: hidden;
       border: 1px solid transparent;
+      cursor: pointer;
     }
 
     .btn::before {
@@ -325,18 +302,10 @@
       box-shadow: 0 16px 34px rgba(255,255,255,0.14);
     }
 
-    .btn-primary:hover {
-      box-shadow: 0 20px 45px rgba(255,255,255,0.2);
-    }
-
     .btn-secondary {
       background: rgba(255,255,255,0.07);
       color: #ffffff;
       border-color: rgba(255,255,255,0.12);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.13);
     }
 
     .right {
@@ -348,6 +317,7 @@
     }
 
     .preview-box {
+      overflow: hidden;
       border-radius: 28px;
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.08);
@@ -373,20 +343,118 @@
     .mini-logo {
       width: 62px;
       height: 62px;
-      object-fit: contain;
+      object-fit: cover;
       border-radius: 18px;
       background: rgba(255,255,255,0.12);
-      padding: 9px;
       border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+      cursor: pointer;
     }
 
-    .game-logo {
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    .preview-box:hover .mini-logo {
+      transform: scale(1.12);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      filter: brightness(1.05);
     }
 
-    .preview-box:hover .game-logo {
-      transform: scale(1.08) rotate(-2deg);
-      box-shadow: 0 14px 35px rgba(0,0,0,0.28);
+    .hover-shot {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: min(380px, 34vw);
+      aspect-ratio: 16 / 9;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(8, 15, 30, 0.92);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(18px) scale(0.96);
+      pointer-events: none;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+      z-index: 40;
+    }
+
+    .hover-shot.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .hover-shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hover-shot-label {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+    }
+
+    .image-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.84);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+      z-index: 80;
+      backdrop-filter: blur(8px);
+    }
+
+    .image-modal.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .image-modal-inner {
+      position: relative;
+      width: min(1000px, 92vw);
+      max-height: 90vh;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.45);
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .image-modal img {
+      width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      display: block;
+      background: #020617;
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.55);
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 2;
     }
 
     .file-title {
@@ -412,12 +480,6 @@
       border-radius: 18px;
       padding: 16px;
       border: 1px solid rgba(255,255,255,0.08);
-      transition: transform 0.25s ease, background 0.25s ease;
-    }
-
-    .info:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.08);
     }
 
     .info-label {
@@ -439,6 +501,32 @@
       font-size: 0.92rem;
       padding: 10px 10px 0;
       line-height: 1.7;
+    }
+
+    .suggest-wrap {
+      margin-top: 30px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .suggest-input {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      outline: none;
+      min-width: 220px;
+    }
+
+    .suggest-status {
+      text-align: center;
+      margin-top: 12px;
+      color: #cbd5e1;
+      min-height: 24px;
     }
 
     .bao-note-wrap {
@@ -472,40 +560,15 @@
       animation: shineMove 4s linear infinite;
     }
 
-    .bao-note::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      padding: 1px;
-      background: linear-gradient(90deg, rgba(125,211,252,0.7), rgba(196,181,253,0.7), rgba(249,168,212,0.7));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
-
     @keyframes popIn {
       0% { transform: scale(0.82); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
 
     @keyframes logoEntrance {
-      0% {
-        transform: scale(0.45) rotate(-10deg);
-        opacity: 0;
-        filter: blur(10px);
-      }
-      60% {
-        transform: scale(1.08) rotate(2deg);
-        opacity: 1;
-        filter: blur(0);
-      }
-      100% {
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-        filter: blur(0);
-      }
+      0% { transform: scale(0.45) rotate(-10deg); opacity: 0; filter: blur(10px); }
+      60% { transform: scale(1.08) rotate(2deg); opacity: 1; filter: blur(0); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0); }
     }
 
     @keyframes splashPulse {
@@ -514,14 +577,8 @@
     }
 
     @keyframes cardRise {
-      0% {
-        opacity: 0;
-        transform: translateY(24px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      0% { opacity: 0; transform: translateY(24px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes shineMove {
@@ -573,25 +630,17 @@
         grid-template-columns: 1fr;
       }
 
-      .buttons {
-        justify-content: flex-start;
-      }
-
-      .btn {
-        width: auto;
-        max-width: max-content;
-      }
-
       .bao-note {
         letter-spacing: 0.14em;
         width: 100%;
+      }
+
+      .hover-shot {
+        width: calc(100vw - 24px);
+        right: 12px;
+        bottom: 12px;
       }
     }
-
-      .bao-note {
-        letter-spacing: 0.14em;
-        width: 100%;
-      }
     }
   </style>
 </head>
@@ -604,7 +653,8 @@
   <div class="splash" id="splash">
     <div class="logo-wrap">
       <img src="splash-logo.png" alt="Splash Logo" class="logo splash-logo" />
-      <div class="logo-text">YureiHub</div>
+      <div class="logo-text">UntilThen</div>
+      <div class="loader-shell"><div class="loader-bar" id="loaderBar"></div></div>
     </div>
   </div>
 
@@ -623,9 +673,9 @@
         </div>
 
         <div class="right" id="details">
-          <div class="preview-box">
+          <div class="preview-box preview-hover" data-title="UntilThen" data-preview="untilthen.png">
             <div class="preview-top">
-              <img src="game-logo.png" alt="Game Logo" class="mini-logo game-logo" />
+              <img src="untilthen.png" alt="Game Logo" class="mini-logo clickable-shot" data-full="untilthen.png" />
               <div>
                 <div class="file-title">UntilThen</div>
                 <div class="file-sub">Large file – please wait while downloading</div>
@@ -656,106 +706,221 @@
         </div>
       </section>
 
-      <div style="margin-top:30px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; align-items:center;">
-        <input id="suggestInput" type="text" placeholder="Suggest a game..." maxlength="80" style="padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.08); color:white; outline:none; min-width:220px;" />
-        
+      <section class="card" style="margin-top:24px;">
+        <div class="left">
+          <h1>Download <span class="shine">Escape From Yandere</span></h1>
+          <p class="desc">
+            Escape from Yandere is a suspense horror escape game where you must survive and find a way out while being hunted by a dangerous yandere girl. Use stealth, solve puzzles, and stay hidden to escape before it’s too late.
+          </p>
+
+          <div class="buttons">
+            <a class="btn btn-primary" href="https://drive.google.com/uc?export=download&id=1ed8-OFBn0SlJQGDlrtac50Ih8GfcIM38">Download Now</a>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="preview-box preview-hover" data-title="Escape From Yandere" data-preview="escape-yandere.png">
+            <div class="preview-top">
+              <img src="escape-yandere.png" alt="Game Logo" class="mini-logo clickable-shot" data-full="escape-yandere.png" />
+              <div>
+                <div class="file-title">Escape From Yandere</div>
+                <div class="file-sub">Survive. Hide. Escape.</div>
+              </div>
+            </div>
+
+            <div class="info-grid">
+              <div class="info">
+                <div class="info-label">Format</div>
+                <div class="info-value">ZIP</div>
+              </div>
+              <div class="info">
+                <div class="info-label">Status</div>
+                <div class="info-value">Available</div>
+              </div>
+              <div class="info">
+                <div class="info-label">Delivery</div>
+                <div class="info-value">Instant</div>
+              </div>
+              <div class="info">
+                <div class="info-label">Device</div>
+                <div class="info-value">PC Friendly</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="footer-note">Game: <strong>Escape From Yandere</strong> — Horror escape experience.</p>
+        </div>
+      </section>
+
+      <div class="suggest-wrap">
+        <input id="suggestInput" class="suggest-input" type="text" placeholder="Suggest a game..." maxlength="80" />
         <button id="suggestBtn" class="btn btn-secondary" type="button">Send Suggestion</button>
       </div>
-      <p id="suggestStatus" style="text-align:center; margin-top:12px; color:#cbd5e1; min-height:24px;"></p>
+      <p id="suggestStatus" class="suggest-status"></p>
 
       <div class="bao-note-wrap">
         <div class="bao-note"><span>THANK YOU BAO!</span></div>
       </div>
     </div>
-  </main>
+    <div class="hover-shot" id="hoverShot">
+    <img id="hoverShotImg" src="" alt="Preview" />
+    <div class="hover-shot-label" id="hoverShotLabel">Game Preview</div>
+  </div>
+
+  <div class="image-modal" id="imageModal">
+    <div class="image-modal-inner">
+      <button class="image-modal-close" id="imageModalClose" type="button">✕</button>
+      <img id="imageModalImg" src="" alt="Full Preview" />
+    </div>
+  </div>
+</main>
 
   <script>
-  window.addEventListener('load', () => {
-    const splash = document.getElementById('splash');
-    setTimeout(() => {
-      splash.classList.add('hidden');
-    }, 1500);
-  });
+    window.addEventListener('load', () => {
+      const splash = document.getElementById('splash');
+      const loaderBar = document.getElementById('loaderBar');
 
-  const btn = document.getElementById('downloadBtn');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      btn.textContent = 'Downloading...';
-      btn.style.opacity = '0.7';
-      btn.style.pointerEvents = 'none';
+      if (loaderBar) {
+        requestAnimationFrame(() => {
+          loaderBar.style.width = '100%';
+        });
+      }
 
       setTimeout(() => {
-        btn.textContent = 'Download Again';
-        btn.style.opacity = '1';
-        btn.style.pointerEvents = 'auto';
-      }, 4000);
+        splash.classList.add('hidden');
+      }, 1700);
     });
-  }
 
-  const suggestBtn = document.getElementById('suggestBtn');
-  const suggestInput = document.getElementById('suggestInput');
-  const suggestStatus = document.getElementById('suggestStatus');
+    const btn = document.getElementById('downloadBtn');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        btn.textContent = 'Downloading...';
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
 
-  const COOLDOWN_MS = 60000;
-  const MIN_LENGTH = 3;
+        setTimeout(() => {
+          btn.textContent = 'Download Again';
+          btn.style.opacity = '1';
+          btn.style.pointerEvents = 'auto';
+        }, 4000);
+      });
+    }
 
-  function normalizeSuggestion(text) {
-    return text.toLowerCase().replace(/\s+/g, ' ').trim();
-  }
+    const suggestBtn = document.getElementById('suggestBtn');
+    const suggestInput = document.getElementById('suggestInput');
+    const suggestStatus = document.getElementById('suggestStatus');
+    const COOLDOWN_MS = 60000;
+    const MIN_LENGTH = 3;
 
-  if (suggestBtn) {
-    suggestBtn.addEventListener('click', async () => {
-      const value = suggestInput.value.trim();
-      const normalized = normalizeSuggestion(value);
+    function normalizeSuggestion(text) {
+      return text.toLowerCase().replace(/\s+/g, ' ').trim();
+    }
 
-      const lastSentAt = Number(localStorage.getItem('suggest_last_sent_at') || '0');
-      const lastSuggestion = localStorage.getItem('suggest_last_text') || '';
-      const now = Date.now();
-      const remaining = COOLDOWN_MS - (now - lastSentAt);
+    if (suggestBtn) {
+      suggestBtn.addEventListener('click', async () => {
+        const value = suggestInput.value.trim();
+        const normalized = normalizeSuggestion(value);
+        const lastSentAt = Number(localStorage.getItem('suggest_last_sent_at') || '0');
+        const lastSuggestion = localStorage.getItem('suggest_last_text') || '';
+        const now = Date.now();
+        const remaining = COOLDOWN_MS - (now - lastSentAt);
 
-      if (value.length < MIN_LENGTH) {
-        suggestStatus.textContent = 'YAWA KA.';
-        return;
-      }
+        if (value.length < MIN_LENGTH) {
+          suggestStatus.textContent = 'Please type a longer game suggestion.';
+          return;
+        }
 
-      if (remaining > 0) {
-        suggestStatus.textContent = 'Wait ' + Math.ceil(remaining / 1000) + 's before sending again.';
-        return;
-      }
+        if (remaining > 0) {
+          suggestStatus.textContent = 'Wait ' + Math.ceil(remaining / 1000) + 's before sending again.';
+          return;
+        }
 
-      if (normalized === lastSuggestion) {
-        suggestStatus.textContent = 'You already sent that.';
-        return;
-      }
+        if (normalized === lastSuggestion) {
+          suggestStatus.textContent = 'You already sent that.';
+          return;
+        }
 
-      suggestBtn.textContent = 'Sending...';
-      suggestBtn.style.opacity = '0.7';
-      suggestBtn.disabled = true;
+        suggestBtn.textContent = 'Sending...';
+        suggestBtn.style.opacity = '0.7';
+        suggestBtn.disabled = true;
 
-      try {
-        const response = await fetch('https://discord.com/api/webhooks/1493504045586059325/IXORkdh2HsFnUGJGVC6HZDTr8rw3qsI8567S7C59THVUy4-JBN33j-BwimQrlAxE8SJt', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            content: '🎮 Suggestion:\n' + value
-          })
-        });
+        try {
+          const response = await fetch('https://discord.com/api/webhooks/1493504045586059325/IXORkdh2HsFnUGJGVC6HZDTr8rw3qsI8567S7C59THVUy4-JBN33j-BwimQrlAxE8SJt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              content: '🎮 Suggestion:\n' + value
+            })
+          });
 
-        if (!response.ok) throw new Error();
+          if (!response.ok) throw new Error();
 
-        localStorage.setItem('suggest_last_sent_at', String(now));
-        localStorage.setItem('suggest_last_text', normalized);
+          localStorage.setItem('suggest_last_sent_at', String(now));
+          localStorage.setItem('suggest_last_text', normalized);
+          suggestStatus.textContent = 'Sent to Discord!';
+          suggestInput.value = '';
+        } catch {
+          suggestStatus.textContent = 'Error sending.';
+        } finally {
+          suggestBtn.textContent = 'Send Suggestion';
+          suggestBtn.style.opacity = '1';
+          suggestBtn.disabled = false;
+        }
+      });
+    }
+  
+    const hoverBoxes = document.querySelectorAll('.preview-hover');
+    const hoverShot = document.getElementById('hoverShot');
+    const hoverShotImg = document.getElementById('hoverShotImg');
+    const hoverShotLabel = document.getElementById('hoverShotLabel');
+    const clickableShots = document.querySelectorAll('.clickable-shot');
+    const imageModal = document.getElementById('imageModal');
+    const imageModalImg = document.getElementById('imageModalImg');
+    const imageModalClose = document.getElementById('imageModalClose');
 
-        suggestStatus.textContent = 'Sent to Discord!';
-        suggestInput.value = '';
+    hoverBoxes.forEach((box) => {
+      box.addEventListener('mouseenter', () => {
+        const preview = box.dataset.preview;
+        const title = box.dataset.title || 'Game Preview';
+        if (!preview || !hoverShot || !hoverShotImg) return;
+        hoverShotImg.src = preview;
+        hoverShotLabel.textContent = title;
+        hoverShot.classList.add('show');
+      });
 
-      } catch {
-        suggestStatus.textContent = 'Error sending.';
-      } finally {
-        suggestBtn.textContent = 'Send Suggestion';
-        suggestBtn.style.opacity = '1';
-        suggestBtn.disabled = false;
+      box.addEventListener('mouseleave', () => {
+        if (hoverShot) hoverShot.classList.remove('show');
+      });
+    });
+
+    clickableShots.forEach((img) => {
+      img.addEventListener('click', () => {
+        const full = img.dataset.full || img.src;
+        if (!imageModal || !imageModalImg) return;
+        imageModalImg.src = full;
+        imageModal.classList.add('show');
+      });
+    });
+
+    if (imageModalClose) {
+      imageModalClose.addEventListener('click', () => {
+        imageModal.classList.remove('show');
+      });
+    }
+
+    if (imageModal) {
+      imageModal.addEventListener('click', (e) => {
+        if (e.target === imageModal) {
+          imageModal.classList.remove('show');
+        }
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && imageModal) {
+        imageModal.classList.remove('show');
       }
     });
-  }
-</script>
+  </script>
+</body>
+</html>
